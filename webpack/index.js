@@ -7,10 +7,13 @@ const Koa = require("koa")
 const fs = require('fs')
 const path = require("path")
 
+const public = path.join(__dirname, '../', 'public')
+
+const webpackUrl = path.join(__dirname, '../', 'webpack.config')
 
 let webpackConfig = null;
 try {
-    webpackConfig = require('../webpack.config')
+    webpackConfig = require(webpackUrl)
 } catch (e) {
     console.error('未发现webpack.config.js文件')
 }
@@ -19,7 +22,7 @@ try {
 require('./hotUpdata')
 
 const app = new Koa();
-app.use(koaStatic("../public", {extensions: ["html"]})) //访问静态html文件
+app.use(koaStatic(public, {extensions: ["html"]})) //访问静态html文件
 
 if (webpackConfig) {
     if (webpackConfig?.proxy) {
